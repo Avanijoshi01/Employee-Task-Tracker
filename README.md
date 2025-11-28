@@ -2,109 +2,117 @@
 
 A fullstack web application for managing employees and their tasks within a company, featuring JWT authentication, role-based access control, and interactive data visualization.
 
-## 🚀 Quick Start
+---
 
-```bash
-# 1. Clone the repository
-git clone https://github.com/Avanijoshi01/Employee-Task-Tracker.git
-cd Employee-Task-Tracker
+## 📋 Table of Contents
+1. [Tech Stack & Architecture](#tech-stack--architecture)
+2. [Setup & Run Instructions](#setup--run-instructions)
+3. [API Endpoint Documentation](#api-endpoint-documentation)
+4. [Screenshots](#screenshots)
+5. [Assumptions & Limitations](#assumptions--limitations)
 
-# 2. Setup Database
-psql -U postgres -c "CREATE DATABASE employee_task_tracker;"
-psql -U postgres -d employee_task_tracker -f database/schema.sql
-psql -U postgres -d employee_task_tracker -f database/sample_data.sql
+---
 
-# 3. Setup Backend
-cd backend
-npm install
-cp .env.example .env
-# Edit .env with your database credentials
-npm start
+## 🏗️ Tech Stack & Architecture
 
-# 4. Setup Frontend (in new terminal)
-cd frontend
-npm install
-cp .env.example .env
-npm run dev
+### Tech Stack
 
-# 5. Open http://localhost:5173
-# Login: admin / password123
-```
+**Frontend:**
+- React 18 - UI library
+- Vite - Build tool and dev server
+- Axios - HTTP client for API calls
+- Recharts - Data visualization library
+- CSS3 - Custom styling with animations
 
-## ✨ Key Features
+**Backend:**
+- Node.js - JavaScript runtime
+- Express - Web application framework
+- PostgreSQL - Relational database
+- JWT - JSON Web Tokens for authentication
+- bcrypt - Password hashing
 
-- 🔐 **JWT Authentication** - Secure login with role-based access
-- 👥 **User Roles** - Admin (full access) and User (view own tasks)
-- 📊 **Data Visualization** - Interactive charts (Pie, Bar) with Recharts
-- 🎨 **Modern UI** - Gradient design, smooth animations, responsive layout
-- 🔍 **Real-time Search** - Instant task filtering
-- 📈 **Smart Insights** - Automated productivity analysis
-- 📱 **Responsive Design** - Works on all devices
-- ✅ **Complete CRUD** - Full task and employee management
+**Database:**
+- PostgreSQL with foreign key relationships
+- Indexes for optimized queries
+- Triggers for automatic timestamp updates
 
-## Tech Stack
-
-### Frontend
-- React 18 with Vite
-- Axios for API calls
-- CSS3 for responsive design
-
-### Backend
-- Node.js with Express
-- PostgreSQL database
-- CORS enabled
-
-### Database
-- PostgreSQL with proper relationships
-- Foreign keys (Employee ↔ Task)
-
-## Architecture Overview
+### Architecture Overview
 
 ```
-Frontend (React) → REST API (Express) → Database (PostgreSQL)
+┌─────────────────────────────────────────┐
+│     Frontend (React + Vite)             │
+│     Port: 5173                          │
+│  - Dashboard, Tasks, Employees pages    │
+│  - Authentication & Authorization       │
+└─────────────────────────────────────────┘
+                  ↕ HTTP/REST
+┌─────────────────────────────────────────┐
+│     Backend (Node.js + Express)         │
+│     Port: 3000                          │
+│  - RESTful API endpoints                │
+│  - JWT middleware                       │
+│  - Business logic                       │
+└─────────────────────────────────────────┘
+                  ↕ SQL
+┌─────────────────────────────────────────┐
+│     Database (PostgreSQL)               │
+│     Port: 5432                          │
+│  - employees, tasks, users tables       │
+│  - Relationships & constraints          │
+└─────────────────────────────────────────┘
 ```
 
-- Frontend runs on `http://localhost:5173`
-- Backend API runs on `http://localhost:3000`
-- PostgreSQL database on port `5432`
+**Key Features:**
+- JWT-based authentication with role-based access control
+- Interactive data visualization (Pie charts, Bar charts)
+- Real-time search and filtering
+- Responsive design for all devices
+- Complete CRUD operations for tasks and employees
 
-## Setup Instructions
+---
+
+## 🚀 Setup & Run Instructions
 
 ### Prerequisites
 - Node.js (v16 or higher)
 - PostgreSQL (v12 or higher)
 - npm or yarn
 
-### Database Setup
+### 1. Database Setup
 
-1. Install PostgreSQL and create a database:
-```sql
+**Create Database:**
+```bash
+psql -U postgres
 CREATE DATABASE employee_task_tracker;
+\q
 ```
 
-2. Run the schema script:
+**Run Schema:**
 ```bash
 psql -U postgres -d employee_task_tracker -f database/schema.sql
+psql -U postgres -d employee_task_tracker -f database/auth_schema.sql
 ```
 
-3. (Optional) Load sample data:
+**Load Sample Data (Optional):**
 ```bash
 psql -U postgres -d employee_task_tracker -f database/sample_data.sql
 ```
 
-### Backend Setup
+### 2. Backend Setup
 
-1. Navigate to backend directory:
+**Navigate to backend directory:**
 ```bash
 cd backend
 ```
 
-2. Install dependencies:
+**Install dependencies:**
 ```bash
 npm install
 ```
 
-3. Create `.env` file:
+**Configure environment:**
+
+Create `.env` file with the following:
 ```env
 PORT=3000
 DB_HOST=localhost
@@ -112,277 +120,352 @@ DB_PORT=5432
 DB_NAME=employee_task_tracker
 DB_USER=postgres
 DB_PASSWORD=your_password
+JWT_SECRET=your-secret-key
 ```
 
-4. Start the server:
+**Start server:**
 ```bash
 npm start
 ```
 
 Backend will run on `http://localhost:3000`
 
-### Frontend Setup
+### 3. Frontend Setup
 
-1. Navigate to frontend directory:
+**Navigate to frontend directory (in new terminal):**
 ```bash
 cd frontend
 ```
 
-2. Install dependencies:
+**Install dependencies:**
 ```bash
 npm install
 ```
 
-3. Create `.env` file:
+**Configure environment:**
+
+Create `.env` file with the following:
 ```env
 VITE_API_URL=http://localhost:3000
 ```
 
-4. Start the development server:
+**Start development server:**
 ```bash
 npm run dev
 ```
 
 Frontend will run on `http://localhost:5173`
 
-## API Documentation
+### 4. Access Application
+
+Open your browser and navigate to: `http://localhost:5173`
+
+**Demo Accounts:**
+- Admin: `admin` / `password123` (Full access)
+- User: `john.doe` / `password123` (View own tasks only)
+
+---
+
+## 📡 API Endpoint Documentation
 
 ### Authentication
 
-All endpoints except `/api/auth/login` and `/api/auth/register` require authentication.
+All endpoints except `/api/auth/login` require authentication via JWT token.
 
-**Headers Required:**
+**Required Header:**
 ```
 Authorization: Bearer <your-jwt-token>
 ```
 
-### Endpoints
+### Authentication Endpoints
 
-#### Authentication
+#### POST /api/auth/login
+Login with username and password.
 
-- **POST /api/auth/login**
-  - Description: Login with username and password
-  - Body: `{ username, password }`
-  - Response: `{ token, user: { id, username, role, employee_id } }`
+**Request Body:**
+```json
+{
+  "username": "admin",
+  "password": "password123"
+}
+```
 
-- **POST /api/auth/register**
-  - Description: Register new user (admin only in production)
-  - Body: `{ username, password, role, employee_id }`
-  - Response: `{ message, user: { id, username, role, employee_id } }`
+**Response:**
+```json
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "user": {
+    "id": 1,
+    "username": "admin",
+    "role": "admin",
+    "employee_id": null
+  }
+}
+```
 
-- **GET /api/auth/me**
-  - Description: Get current user information
-  - Headers: `Authorization: Bearer <token>`
-  - Response: `{ id, username, role, employee_id }`
+#### GET /api/auth/me
+Get current user information.
 
-#### Employees
+**Response:**
+```json
+{
+  "id": 1,
+  "username": "admin",
+  "role": "admin",
+  "employee_id": null
+}
+```
 
-- **GET /api/employees**
-  - Description: Get all employees
-  - Response: `[{ id, name, email, department, position }]`
+### Employee Endpoints
 
-- **GET /api/employees/:id**
-  - Description: Get employee by ID
-  - Response: `{ id, name, email, department, position }`
+#### GET /api/employees
+Get all employees.
 
-- **POST /api/employees**
-  - Description: Create new employee
-  - Body: `{ name, email, department, position }`
-  - Response: `{ id, name, email, department, position }`
+**Response:**
+```json
+[
+  {
+    "id": 1,
+    "name": "John Doe",
+    "email": "john.doe@company.com",
+    "department": "Engineering",
+    "position": "Senior Developer"
+  }
+]
+```
 
-#### Tasks
+#### POST /api/employees (Admin only)
+Create new employee.
 
-- **GET /api/tasks**
-  - Description: Get all tasks (with optional filters)
-  - Query params: `?status=pending&employee_id=1`
-  - Response: `[{ id, title, description, status, priority, employee_id, employee_name, due_date, created_at }]`
+**Request Body:**
+```json
+{
+  "name": "Jane Smith",
+  "email": "jane.smith@company.com",
+  "department": "Marketing",
+  "position": "Manager"
+}
+```
 
-- **GET /api/tasks/:id**
-  - Description: Get task by ID
-  - Response: `{ id, title, description, status, priority, employee_id, due_date, created_at }`
+#### PUT /api/employees/:id (Admin only)
+Update employee.
 
-- **POST /api/tasks**
-  - Description: Create new task
-  - Body: `{ title, description, status, priority, employee_id, due_date }`
-  - Response: `{ id, title, description, status, priority, employee_id, due_date, created_at }`
+#### DELETE /api/employees/:id (Admin only)
+Delete employee.
 
-- **PUT /api/tasks/:id**
-  - Description: Update task
-  - Body: `{ title, description, status, priority, employee_id, due_date }`
-  - Response: `{ id, title, description, status, priority, employee_id, due_date, updated_at }`
+### Task Endpoints
 
-- **DELETE /api/tasks/:id**
-  - Description: Delete task
-  - Response: `{ message: "Task deleted successfully" }`
+#### GET /api/tasks
+Get all tasks (filtered by user role).
 
-#### Dashboard
+**Query Parameters:**
+- `status` - Filter by status (Pending, In Progress, Completed)
+- `employee_id` - Filter by employee ID
+- `priority` - Filter by priority (Low, Medium, High)
 
-- **GET /api/dashboard**
-  - Description: Get dashboard summary
-  - Response: `{ totalTasks, completedTasks, pendingTasks, inProgressTasks, completionRate, totalEmployees }`
+**Example:** `/api/tasks?status=Pending&employee_id=1`
 
-## Features
+**Response:**
+```json
+[
+  {
+    "id": 1,
+    "title": "Implement user authentication",
+    "description": "Add JWT-based authentication",
+    "status": "In Progress",
+    "priority": "High",
+    "employee_id": 1,
+    "employee_name": "John Doe",
+    "due_date": "2025-12-05",
+    "created_at": "2025-11-28T10:00:00.000Z"
+  }
+]
+```
 
-- View all employees and their information
-- View all tasks with employee assignments
-- Filter tasks by status (Pending, In Progress, Completed)
-- Filter tasks by employee
-- Add new tasks and assign to employees
-- Update task status and details
-- Delete tasks
-- Dashboard with summary statistics
-- Responsive design for mobile and desktop
+#### POST /api/tasks (Admin only)
+Create new task.
 
-## Assumptions & Limitations
+**Request Body:**
+```json
+{
+  "title": "Fix login bug",
+  "description": "Users cannot login with special characters",
+  "status": "Pending",
+  "priority": "High",
+  "employee_id": 1,
+  "due_date": "2025-12-01"
+}
+```
 
-### Assumptions
-- Users have PostgreSQL installed or can install it
-- Node.js v16+ is available
-- Modern web browser (Chrome, Firefox, Safari, Edge)
-- Local development environment
-- Sample data represents realistic use cases
+#### PUT /api/tasks/:id (Admin only)
+Update task.
 
-### Current Limitations
-- Task priorities: Low, Medium, High (fixed options)
-- Task statuses: Pending, In Progress, Completed (fixed options)
-- No file attachments for tasks
-- No task comments or activity history
-- No email notifications
-- No task dependencies or subtasks
-- No time tracking functionality
-- Token expiration set to 24 hours (configurable)
+#### DELETE /api/tasks/:id (Admin only)
+Delete task.
 
-### Design Decisions
-- JWT stored in localStorage (consider httpOnly cookies for production)
-- Client-side filtering for better performance
-- Sample data included for quick testing
-- Environment variables for configuration
-- Separate frontend and backend for scalability
+### Dashboard Endpoint
 
-## Future Enhancements
+#### GET /api/dashboard
+Get dashboard statistics (filtered by user role).
 
-- User authentication and authorization
-- Role-based access control (Admin vs Regular User)
-- Task comments and activity log
-- File attachments
-- Email notifications
-- Advanced filtering and search
-- Task dependencies
-- Time tracking
+**Response:**
+```json
+{
+  "totalTasks": 10,
+  "completedTasks": 3,
+  "pendingTasks": 4,
+  "inProgressTasks": 3,
+  "completionRate": 30.0,
+  "totalEmployees": 5
+}
+```
 
-## Screenshots
+### Testing with curl
+
+**Login:**
+```bash
+curl -X POST http://localhost:3000/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"username":"admin","password":"password123"}'
+```
+
+**Get Tasks (with token):**
+```bash
+curl http://localhost:3000/api/tasks \
+  -H "Authorization: Bearer YOUR_TOKEN_HERE"
+```
+
+---
+
+## 📸 Screenshots
 
 ### Login Page
 ![Login Page](screenshots/login.png)
-*Beautiful gradient login page with demo account information*
+
+*Gradient login page with demo account information*
 
 ### Admin Dashboard
 ![Admin Dashboard](screenshots/admin-dashboard.png)
-*Interactive dashboard with charts, statistics, and smart insights*
+
+*Interactive dashboard with pie chart (task status), bar charts (priority distribution, tasks by employee), and smart insights*
 
 ### User Dashboard
 ![User Dashboard](screenshots/user-dashboard.png)
-*Personalized dashboard showing only user's assigned tasks*
+
+*Personalized dashboard showing only user's assigned tasks with filtered statistics*
 
 ### Tasks Management
 ![Tasks Page](screenshots/tasks.png)
-*Task management with real-time search, filters, and CRUD operations*
+
+*Task management with real-time search, status filters, employee filters, and CRUD operations (Admin only)*
 
 ### Employee Management
 ![Employees Page](screenshots/employees.png)
-*Employee list with card-based layout*
+
+*Employee list with card-based layout and add employee functionality (Admin only)*
 
 ### Mobile Responsive
 ![Mobile View](screenshots/mobile.png)
-*Fully responsive design works on all devices*
 
-> **Note:** To view the application live, follow the setup instructions above. Screenshots show the application with sample data loaded.
+*Fully responsive design that works on all devices*
 
-## License
+> **Note:** Screenshots show the application with sample data loaded. Follow the setup instructions above to run the application locally.
 
-MIT
+---
 
+## 📝 Assumptions & Limitations
 
-## 🔐 Authentication & Authorization (Bonus Feature)
+### Assumptions
 
-**IMPLEMENTED!** The application now includes JWT-based authentication with role-based access control.
+1. **Environment:**
+   - Users have PostgreSQL installed or can install it
+   - Node.js v16+ is available
+   - Modern web browser (Chrome, Firefox, Safari, Edge)
+   - Local development environment
 
-### Features
-- ✅ Secure login with JWT tokens
-- ✅ Password hashing with bcrypt
-- ✅ Two user roles: Admin and User
-- ✅ Protected API endpoints
-- ✅ Role-based UI rendering
+2. **Data:**
+   - Sample data represents realistic use cases
+   - Employee emails are unique
+   - Task assignments are valid (employee exists)
 
-### Demo Accounts
+3. **Security:**
+   - Development environment (not production-ready security)
+   - JWT tokens stored in localStorage
+   - Database credentials in .env file
 
-**Admin Account (Full Access):**
-- Username: `admin`
-- Password: `password123`
-- Can: Create/update/delete tasks and employees, view all data
+### Limitations
 
-**User Accounts (Limited Access):**
-- Username: `john.doe` / Password: `password123` (Employee: John Doe)
-- Username: `jane.smith` / Password: `password123` (Employee: Jane Smith)
-- Can: View only their assigned tasks
+1. **Task Management:**
+   - Task priorities: Low, Medium, High (fixed options)
+   - Task statuses: Pending, In Progress, Completed (fixed options)
+   - No file attachments for tasks
+   - No task comments or activity history
+   - No task dependencies or subtasks
+   - No time tracking functionality
 
-### Documentation
-See [AUTHENTICATION.md](AUTHENTICATION.md) for complete authentication documentation including:
-- API endpoints
-- Testing guide
-- Security features
-- User management
+2. **Authentication:**
+   - Token expiration: 24 hours (configurable)
+   - No password reset functionality
+   - No email verification
+   - No two-factor authentication
 
-### Quick Test
-1. Open http://localhost:5173
-2. Login with `admin` / `password123` to see full admin features
-3. Logout and login with `john.doe` / `password123` to see user restrictions
+3. **Features:**
+   - No email notifications
+   - No real-time updates (WebSockets)
+   - No export functionality (CSV, PDF)
+   - No advanced search with date ranges
+   - No task history or audit log
 
+4. **Scalability:**
+   - Client-side filtering (may be slow with large datasets)
+   - No pagination implemented
+   - No caching mechanism
+   - Single database instance
 
-## 🎨 Advanced UI Features & Data Visualization
+### Design Decisions
 
-**BONUS POINTS FEATURES IMPLEMENTED!**
+1. **JWT in localStorage:**
+   - Chosen for simplicity in development
+   - Production should use httpOnly cookies
 
-### Interactive Data Visualization
-- ✅ **Pie Chart** - Task status distribution with percentages
-- ✅ **Bar Charts** - Priority distribution and tasks by employee
-- ✅ **Animated Charts** - Smooth transitions and hover effects
-- ✅ **Responsive Charts** - Works on all screen sizes
+2. **Client-side filtering:**
+   - Better performance for small to medium datasets
+   - Reduces server load
 
-### Enhanced User Experience
-- ✅ **Gradient Design System** - Modern, professional appearance
-- ✅ **Smooth Animations** - Fade-in, slide-in, and hover effects
-- ✅ **Real-time Search** - Instant task filtering
-- ✅ **Smart Insights** - Automated analysis (most productive employee, tasks due soon)
-- ✅ **Progress Indicators** - Visual completion rate bars
-- ✅ **Loading States** - Animated loading indicators
-- ✅ **Empty States** - Helpful messages when no data
+3. **Separate frontend and backend:**
+   - Allows independent scaling
+   - Easier to maintain and deploy
 
-### Creative UX Decisions
-- ✅ **Role-Based UI** - Different views for admin vs users
-- ✅ **Color Psychology** - Meaningful color coding (green=success, red=urgent)
-- ✅ **Interactive Elements** - Ripple effects, hover elevations
-- ✅ **Notification System** - Success/error feedback
-- ✅ **Responsive Design** - Mobile-first approach
+4. **Sample data included:**
+   - Enables quick testing and demonstration
+   - Shows realistic use cases
 
-### Data Insights
-- 📊 Task status distribution visualization
-- 📈 Priority level analysis
-- 👤 Employee productivity comparison
-- 🏆 Most productive employee identification
-- ⚡ Average tasks per employee
-- 📅 Upcoming deadlines tracking
+5. **Role-based access:**
+   - Admin: Full CRUD access
+   - User: Read-only access to own tasks
+   - Enforced on both frontend (UI) and backend (API)
 
-### Documentation
-See [ADVANCED_FEATURES.md](ADVANCED_FEATURES.md) for complete documentation of all advanced features including:
-- Detailed feature descriptions
-- Design principles applied
-- Technical implementation
-- UX innovations
-- Visual showcase
+---
 
-### Technologies Used
-- **Recharts** - Professional charting library
-- **CSS3 Animations** - Smooth transitions and effects
-- **Gradient Design** - Modern visual aesthetics
-- **React Hooks** - Efficient state management
+## 📚 Additional Documentation
+
+For more detailed information, see:
+- **DOCUMENTATION.md** - Complete guide including API testing, authentication details, advanced features, and deployment instructions
+
+---
+
+## 📄 License
+
+MIT License
+
+---
+
+## 👨‍💻 Author
+
+**Avani Joshi**
+- GitHub: [@Avanijoshi01](https://github.com/Avanijoshi01)
+- Repository: [Employee-Task-Tracker](https://github.com/Avanijoshi01/Employee-Task-Tracker)
+
+---
+
+**Built for ProU Technology Fullstack Web Application Assignment - Track 3**
