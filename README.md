@@ -69,6 +69,77 @@ A fullstack web application for managing employees and their tasks within a comp
 - Responsive design for all devices
 - Complete CRUD operations for tasks and employees
 
+### Project Structure
+
+```
+employee-task-tracker/
+│
+├── frontend/                          # React Frontend Application
+│   ├── src/
+│   │   ├── components/               # Reusable React components
+│   │   │   ├── EmployeeForm.jsx     # Form for adding employees
+│   │   │   ├── TaskForm.jsx         # Form for adding/editing tasks
+│   │   │   └── Notification.jsx     # Notification component
+│   │   │
+│   │   ├── pages/                   # Page components
+│   │   │   ├── Dashboard.jsx        # Dashboard with charts & stats
+│   │   │   ├── Tasks.jsx            # Tasks management page
+│   │   │   ├── Employees.jsx        # Employees list page
+│   │   │   └── Login.jsx            # Login page
+│   │   │
+│   │   ├── services/                # API integration
+│   │   │   └── api.js               # Axios API calls
+│   │   │
+│   │   ├── App.jsx                  # Main app component
+│   │   ├── App.css                  # Application styles
+│   │   ├── main.jsx                 # React entry point
+│   │   └── index.css                # Global styles
+│   │
+│   ├── index.html                   # HTML template
+│   ├── package.json                 # Frontend dependencies
+│   ├── vite.config.js              # Vite configuration
+│   └── .env                        # Environment variables
+│
+├── backend/                         # Node.js/Express Backend API
+│   ├── app/
+│   │   ├── config/
+│   │   │   └── database.js         # PostgreSQL connection
+│   │   │
+│   │   ├── models/                 # Data models
+│   │   │   ├── Employee.js         # Employee model
+│   │   │   ├── Task.js             # Task model
+│   │   │   └── User.js             # User model
+│   │   │
+│   │   ├── controllers/            # Request handlers
+│   │   │   ├── authController.js   # Authentication logic
+│   │   │   ├── employeeController.js
+│   │   │   └── taskController.js
+│   │   │
+│   │   ├── middleware/             # Custom middleware
+│   │   │   └── auth.js             # JWT authentication
+│   │   │
+│   │   └── routes/                 # API routes
+│   │       ├── authRoutes.js       # Auth endpoints
+│   │       ├── employeeRoutes.js   # Employee endpoints
+│   │       ├── taskRoutes.js       # Task endpoints
+│   │       └── dashboardRoutes.js  # Dashboard endpoint
+│   │
+│   ├── scripts/
+│   │   └── createUsers.js          # User creation script
+│   │
+│   ├── server.js                   # Express server setup
+│   ├── package.json                # Backend dependencies
+│   └── .env                        # Environment variables
+│
+├── database/                       # Database files
+│   ├── schema.sql                 # Main database schema
+│   ├── auth_schema.sql            # Authentication schema
+│   └── sample_data.sql            # Sample data for testing
+│
+├── README.md                      # Main documentation
+└── DOCUMENTATION.md               # Additional documentation
+```
+
 ---
 
 ## 🚀 Setup & Run Instructions
