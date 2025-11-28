@@ -1,6 +1,46 @@
 # Employee Task Tracker
 
-A fullstack web application for managing employees and their tasks within a company.
+A fullstack web application for managing employees and their tasks within a company, featuring JWT authentication, role-based access control, and interactive data visualization.
+
+## 🚀 Quick Start
+
+```bash
+# 1. Clone the repository
+git clone https://github.com/Avanijoshi01/Employee-Task-Tracker.git
+cd Employee-Task-Tracker
+
+# 2. Setup Database
+psql -U postgres -c "CREATE DATABASE employee_task_tracker;"
+psql -U postgres -d employee_task_tracker -f database/schema.sql
+psql -U postgres -d employee_task_tracker -f database/sample_data.sql
+
+# 3. Setup Backend
+cd backend
+npm install
+cp .env.example .env
+# Edit .env with your database credentials
+npm start
+
+# 4. Setup Frontend (in new terminal)
+cd frontend
+npm install
+cp .env.example .env
+npm run dev
+
+# 5. Open http://localhost:5173
+# Login: admin / password123
+```
+
+## ✨ Key Features
+
+- 🔐 **JWT Authentication** - Secure login with role-based access
+- 👥 **User Roles** - Admin (full access) and User (view own tasks)
+- 📊 **Data Visualization** - Interactive charts (Pie, Bar) with Recharts
+- 🎨 **Modern UI** - Gradient design, smooth animations, responsive layout
+- 🔍 **Real-time Search** - Instant task filtering
+- 📈 **Smart Insights** - Automated productivity analysis
+- 📱 **Responsive Design** - Works on all devices
+- ✅ **Complete CRUD** - Full task and employee management
 
 ## Tech Stack
 
@@ -107,7 +147,33 @@ Frontend will run on `http://localhost:5173`
 
 ## API Documentation
 
+### Authentication
+
+All endpoints except `/api/auth/login` and `/api/auth/register` require authentication.
+
+**Headers Required:**
+```
+Authorization: Bearer <your-jwt-token>
+```
+
 ### Endpoints
+
+#### Authentication
+
+- **POST /api/auth/login**
+  - Description: Login with username and password
+  - Body: `{ username, password }`
+  - Response: `{ token, user: { id, username, role, employee_id } }`
+
+- **POST /api/auth/register**
+  - Description: Register new user (admin only in production)
+  - Body: `{ username, password, role, employee_id }`
+  - Response: `{ message, user: { id, username, role, employee_id } }`
+
+- **GET /api/auth/me**
+  - Description: Get current user information
+  - Headers: `Authorization: Bearer <token>`
+  - Response: `{ id, username, role, employee_id }`
 
 #### Employees
 
@@ -169,13 +235,29 @@ Frontend will run on `http://localhost:5173`
 
 ## Assumptions & Limitations
 
-- Single-user system (no authentication in base version)
-- All users have full access to all features
-- Task priorities: Low, Medium, High
-- Task statuses: Pending, In Progress, Completed
-- Simple validation on both frontend and backend
+### Assumptions
+- Users have PostgreSQL installed or can install it
+- Node.js v16+ is available
+- Modern web browser (Chrome, Firefox, Safari, Edge)
+- Local development environment
+- Sample data represents realistic use cases
+
+### Current Limitations
+- Task priorities: Low, Medium, High (fixed options)
+- Task statuses: Pending, In Progress, Completed (fixed options)
 - No file attachments for tasks
-- No task comments or history tracking
+- No task comments or activity history
+- No email notifications
+- No task dependencies or subtasks
+- No time tracking functionality
+- Token expiration set to 24 hours (configurable)
+
+### Design Decisions
+- JWT stored in localStorage (consider httpOnly cookies for production)
+- Client-side filtering for better performance
+- Sample data included for quick testing
+- Environment variables for configuration
+- Separate frontend and backend for scalability
 
 ## Future Enhancements
 
@@ -190,7 +272,31 @@ Frontend will run on `http://localhost:5173`
 
 ## Screenshots
 
-(Add screenshots here after running the application)
+### Login Page
+![Login Page](screenshots/login.png)
+*Beautiful gradient login page with demo account information*
+
+### Admin Dashboard
+![Admin Dashboard](screenshots/admin-dashboard.png)
+*Interactive dashboard with charts, statistics, and smart insights*
+
+### User Dashboard
+![User Dashboard](screenshots/user-dashboard.png)
+*Personalized dashboard showing only user's assigned tasks*
+
+### Tasks Management
+![Tasks Page](screenshots/tasks.png)
+*Task management with real-time search, filters, and CRUD operations*
+
+### Employee Management
+![Employees Page](screenshots/employees.png)
+*Employee list with card-based layout*
+
+### Mobile Responsive
+![Mobile View](screenshots/mobile.png)
+*Fully responsive design works on all devices*
+
+> **Note:** To view the application live, follow the setup instructions above. Screenshots show the application with sample data loaded.
 
 ## License
 
